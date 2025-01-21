@@ -7,7 +7,7 @@
 class Writer
 {
 public:
-    Writer(const std::vector<CodeStep>& steps);
+    Writer(const std::vector<CodeStep>& steps, std::string outputfolder);
 private:
     
 };
