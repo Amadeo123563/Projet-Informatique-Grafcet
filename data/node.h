@@ -7,6 +7,7 @@ class Node
 {
 public:
     enum Type {
+        InitialStep,
         Step,
         Action,
         Transition
