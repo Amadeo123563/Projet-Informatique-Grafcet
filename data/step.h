@@ -18,10 +18,14 @@ public:
     const std::string& getContent() const;
     void setContent(const std::string &value);
 
+    bool getInitialStep() const;
+    void setInitialStep(bool value);
+
 private:
     std::vector<int> associatedActions;
     std::vector<int> nextTransitions;
     std::string content;
+    bool initialStep;
 };
 
 #endif // STEP_H

@@ -34,3 +34,13 @@ void Step::setContent(const std::string &value)
 {
     content = value;
 }
+
+bool Step::getInitialStep() const
+{
+    return initialStep;
+}
+
+void Step::setInitialStep(bool value)
+{
+    initialStep = value;
+}
