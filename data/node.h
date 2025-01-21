@@ -7,6 +7,7 @@ class Node
 {
 public:
     enum Type {
+        Invalid,
         InitialStep,
         Step,
         Action,
@@ -24,6 +25,8 @@ public:
 
     std::string getText() const;
     void setText(const std::string &value);
+
+    bool isValid();
 
 private:
     int id;

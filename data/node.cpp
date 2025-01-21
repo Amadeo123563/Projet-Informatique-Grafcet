@@ -2,7 +2,8 @@
 
 Node::Node()
 {
-
+    id = -1;
+    type = Invalid;
 }
 
 int Node::getId() const
@@ -30,11 +31,17 @@ void Node::setType(const std::string &value)
     if(value == "rectangle") {
         type = Action;
     }
-    if(value == "diamond") {
+    else if(value == "diamond") {
         type = Transition;
     }
-    if(value == "ellipse") {
+    else if(value == "ellipse") {
         type = Step;
+    }
+    else if(value == "octagon") {
+        type = InitialStep;
+    }
+    else {
+        type = Invalid;
     }
 }
 
@@ -46,4 +53,9 @@ std::string Node::getText() const
 void Node::setText(const std::string &value)
 {
     text = value;
+}
+
+bool Node::isValid()
+{
+    return (id >= 0) && (type != Invalid);
 }
