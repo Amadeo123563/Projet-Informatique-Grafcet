@@ -9,7 +9,7 @@
 class Writer
 {
 public:
-    Writer(const std::vector<CodeStep>& steps, const std::unordered_map<int, PinMode>& pinModes, std::string outputfolder);
+    Writer(const std::vector<CodeStep>& steps, const std::vector<std::string>& globalVariables, const std::unordered_map<int, PinMode>& pinModes, std::string outputfolder);
 private:
     
 };

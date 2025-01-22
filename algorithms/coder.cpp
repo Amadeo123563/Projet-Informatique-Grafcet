@@ -16,3 +16,8 @@ const std::unordered_map<int, PinMode>& Coder::getPinmodes() const
 {
     return pinmodes;
 }
+
+const std::vector<std::string>& Coder::getGlobalVariables() const
+{
+    return globalVariables;
+}

@@ -18,9 +18,12 @@ public:
 
     const std::unordered_map<int, PinMode>& getPinmodes() const;
 
+    const std::vector<std::string>& getGlobalVariables() const;
+
 private:
     std::vector<CodeStep> codeSteps;
     std::unordered_map<int, PinMode> pinmodes;
+    std::vector<std::string> globalVariables;
 };
 
 #endif // CODER_H
