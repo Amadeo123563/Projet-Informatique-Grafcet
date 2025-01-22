@@ -11,3 +11,8 @@ const std::vector<CodeStep>& Coder::getCodeSteps() const
 {
     return codeSteps;
 }
+
+const std::unordered_map<int, PinMode>& Coder::getPinmodes() const
+{
+    return pinmodes;
+}

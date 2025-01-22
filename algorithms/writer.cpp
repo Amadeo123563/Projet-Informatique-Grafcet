@@ -1,6 +1,6 @@
 #include "writer.h"
 
-Writer::Writer(const std::vector<CodeStep>& steps, std::string outputfolder)
+Writer::Writer(const std::vector<CodeStep>& steps, const std::unordered_map<int, PinMode>& pinModes, std::string outputfolder)
 {
     //TODO
 }
