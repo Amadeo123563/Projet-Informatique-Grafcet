@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     Reader reader(file);
     Associator associator(reader.getNodes(), reader.getEdges());
     Coder coder(associator.getSteps(), associator.getActions(), associator.getTransitions());
-    Writer writer(coder.getCodeSteps(), outputFolder);
+    Writer writer(coder.getCodeSteps(), coder.getPinmodes(), outputFolder);
 
     return 0;
 }
