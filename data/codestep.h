@@ -14,7 +14,10 @@ public:
     void setEndCode(const std::string &value);
     void setTransitionCode(const std::string &value);
 
-    std::string getCode() const;
+    std::string getCode(int stepNumber) const;
+
+    bool getIsInitial() const;
+    void setIsInitial(bool value);
 
 private:
     std::string constructorCode;
@@ -22,6 +25,8 @@ private:
     std::string loopCode;
     std::string endCode;
     std::string transitionCode;
+
+    bool isInitial;
 };
 
 #endif // CODESTEP_H

@@ -30,7 +30,18 @@ void CodeStep::setTransitionCode(const std::string &value)
     transitionCode = value;
 }
 
-std::string CodeStep::getCode() const
+std::string CodeStep::getCode(int stepNumber) const
 {
+    //TODO: Add constant strings
     return constructorCode + initCode + loopCode + endCode + transitionCode;
+}
+
+bool CodeStep::getIsInitial() const
+{
+    return isInitial;
+}
+
+void CodeStep::setIsInitial(bool value)
+{
+    isInitial = value;
 }
