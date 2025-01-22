@@ -33,17 +33,17 @@ void CodeStep::setTransitionCode(const std::string &value)
 std::string CodeStep::getCode(int stepNumber) const
 {
     const std::string num = std::to_string(stepNumber);
-    return "Step" + num + "::Step" + num + "() : Grafstep(" + num + ") {" +
+    return "Step" + num + "::Step" + num + "() : Grafstep(" + num + ") {\n" +
             constructorCode +
-            "}\nvoid Step" + num + "::init() {" +
+            "\n}\n\nvoid Step" + num + "::init() {\n" +
             initCode +
-            "}\nvoid Step" + num + "::loop() {" +
+            "\n}\n\nvoid Step" + num + "::loop() {\n" +
             loopCode +
-            "}\nvoid Step" + num + "::end() {" +
+            "\n}\n\nvoid Step" + num + "::end() {\n" +
             endCode +
-            "}\nbool Step" + num + "::shouldTransitionTo(int step, const std::vector<int>& activeSteps) const {" +
+            "\n}\n\nbool Step" + num + "::shouldTransitionTo(int step, const std::vector<int>& activeSteps) const {\n" +
             transitionCode +
-            "}\n\n";
+            "\n}\n\n\n";
 }
 
 bool CodeStep::getIsInitial() const
