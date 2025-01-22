@@ -35,7 +35,7 @@ std::string CodeStep::getCode(int stepNumber) const
     const std::string num = std::to_string(stepNumber);
     return "Step" + num + "::Step" + num + "() : Grafstep(" + num + ") {\n" +
             constructorCode +
-            "\n}\n\nvoid Step" + num + "::init() {\n" +
+            "\n}\n\nvoid Step" + num + "::init() {\n    Grafstep::init();\n" +
             initCode +
             "\n}\n\nvoid Step" + num + "::loop() {\n" +
             loopCode +
