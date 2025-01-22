@@ -10,6 +10,7 @@ class Reader
 {
 public:
     Reader(const std::string& filename);
+    void parseFile(const std::string& filename);
 
     const std::vector<Node>& getNodes() const;
 
