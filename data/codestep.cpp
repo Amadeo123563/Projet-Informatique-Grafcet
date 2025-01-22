@@ -32,8 +32,18 @@ void CodeStep::setTransitionCode(const std::string &value)
 
 std::string CodeStep::getCode(int stepNumber) const
 {
-    //TODO: Add constant strings
-    return constructorCode + initCode + loopCode + endCode + transitionCode;
+    const std::string num = std::to_string(stepNumber);
+    return "Step" + num + "::Step" + num + "() : Grafstep(" + num + ") {" +
+            constructorCode +
+            "}\nvoid Step" + num + "::init() {" +
+            initCode +
+            "}\nvoid Step" + num + "::loop() {" +
+            loopCode +
+            "}\nvoid Step" + num + "::end() {" +
+            endCode +
+            "}\nbool Step" + num + "::shouldTransitionTo(int step, const std::vector<int>& activeSteps) const {" +
+            transitionCode +
+            "}\n\n";
 }
 
 bool CodeStep::getIsInitial() const
