@@ -316,7 +316,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     }
     const size_t superiorEqPos = part.find(">=");
     if (superiorEqPos != std::string::npos) {
-        return addGlobalVarPreffixes(part.substr(0, superiorEqPos - 1)) + " >= " + addGlobalVarPreffixes(part.substr(superiorEqPos + 6));
+        return addGlobalVarPreffixes(part.substr(0, superiorEqPos - 1)) + " >= " + addGlobalVarPreffixes(part.substr(superiorEqPos + 3));
     }
     const size_t equalsPos = part.find("=");
     if (equalsPos != std::string::npos) {
@@ -332,7 +332,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     }
     const size_t superiorPos = part.find(">");
     if (superiorPos != std::string::npos) {
-        return addGlobalVarPreffixes(part.substr(0, superiorPos - 1)) + " > " + addGlobalVarPreffixes(part.substr(superiorPos + 5));
+        return addGlobalVarPreffixes(part.substr(0, superiorPos - 1)) + " > " + addGlobalVarPreffixes(part.substr(superiorPos + 2));
     }
 
     std::cout << "Unknown transition part: " << part << std::endl;
