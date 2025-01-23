@@ -5,8 +5,8 @@
 #include <fstream>
 #include <unordered_map>
 #include <regex>
-#include "data/codestep.h"
-#include "data/pinmode.h"
+#include "../data/codestep.h"
+#include "../data/pinmode.h"
 
 class Writer
 {

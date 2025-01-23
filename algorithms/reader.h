@@ -3,8 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "data/node.h"
-#include "data/edge.h"
+#include "../data/node.h"
+#include "../data/edge.h"
 
 class Reader
 {

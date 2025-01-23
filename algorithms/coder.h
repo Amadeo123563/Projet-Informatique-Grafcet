@@ -4,11 +4,11 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
-#include "data/step.h"
-#include "data/action.h"
-#include "data/transition.h"
-#include "data/codestep.h"
-#include "data/pinmode.h"
+#include "../data/step.h"
+#include "../data/action.h"
+#include "../data/transition.h"
+#include "../data/codestep.h"
+#include "../data/pinmode.h"
 
 #include <iostream>
 

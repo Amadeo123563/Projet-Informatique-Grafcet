@@ -2,11 +2,11 @@
 #define ASSOCIATOR_H
 
 #include <vector>
-#include "data/node.h"
-#include "data/edge.h"
-#include "data/step.h"
-#include "data/action.h"
-#include "data/transition.h"
+#include "../data/node.h"
+#include "../data/edge.h"
+#include "../data/step.h"
+#include "../data/action.h"
+#include "../data/transition.h"
 
 class Associator
 {
