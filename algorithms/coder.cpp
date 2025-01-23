@@ -84,6 +84,8 @@ void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Ac
             initCode += "    " + addGlobalVarPreffixes(action.substr(0, equalPos - 1)) + " = " + addGlobalVarPreffixes(action.substr(equalPos + 3)) + ";\n";
             continue;
         }
+
+        std::cout << "Unknown action: " << action << std::endl;;
     }
 
     code.setInitCode(initCode);
@@ -151,11 +153,14 @@ std::string Coder::addGlobalVarPreffixes(const std::string &input)
         }
         output += input[c];
     }
+    addVariable(foundVariableBuffer);
     return output;
 }
 
 void Coder::addVariable(const std::string &name)
 {
+    if(name.size() < 1)
+        return;
     for(size_t v = 0; v < globalVariables.size(); v++)
     {
         if(globalVariables[v] == name)
@@ -284,6 +289,8 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     if (superiorPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, superiorPos - 1)) + " > " + addGlobalVarPreffixes(part.substr(superiorPos + 5));
     }
+
+    std::cout << "Unknown transition part: " << part << std::endl;
 
     return "true";
 }
