@@ -7,10 +7,11 @@ class PinMode
 {
 public:
     enum Mode {
-        Input,
-        Output,
-        Input_Pullup,
-        Input_Pulldown
+        None = 0,
+        Output = 1,
+        Input_Pullup = 2,
+        Input_Pulldown = 3,
+        Input = 4
     };
     PinMode();
     PinMode(const Mode &value);
@@ -18,6 +19,7 @@ public:
     Mode getMode() const;
     std::string toString() const;
     void setMode(const Mode &value);
+    void forceSetMode(const Mode &value);
 
 private:
     Mode mode;
