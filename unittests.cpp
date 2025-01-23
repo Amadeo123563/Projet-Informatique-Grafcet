@@ -1,12 +1,5 @@
 #include "unittests.h"
 
-#include <iostream>
-
-#include "algorithms/reader.h"
-#include "algorithms/associator.h"
-#include "algorithms/coder.h"
-#include "algorithms/writer.h"
-
 void UnitTests::testReader() {
     std::cout << "Testing Reader..." << std::endl;
     //TODO: Implement tests
