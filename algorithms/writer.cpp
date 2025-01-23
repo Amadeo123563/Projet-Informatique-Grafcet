@@ -59,6 +59,7 @@ void Writer::writeGlobalVarsHpp(const std::string &destination, const std::vecto
     dst <<  "struct GlobalVars\n";
     dst <<  "{\n";
 
+    //Write all global variable as doubles
     for(size_t v = 0; v < globalVariables.size(); v++)
     {
         dst << "    double " << globalVariables[v] << ";\n";
@@ -78,10 +79,12 @@ void Writer::writeMainCpp(const std::string &destination, const std::unordered_m
     dst << "SpecificGrafcet* grafcet;\n\n";
 
     dst << "void setup() {\n";
+    //Set all pin modes
     for(std::unordered_map<std::string, PinMode>::const_iterator it = pinModes.begin(); it != pinModes.end(); it++)
     {
         dst << "    pinMode(" << it->first << ", " << it->second.toString() << ");\n";
         const std::string& pinName = it->first;
+        //Check if it's a valid pin name, if not, interpret it as a constant that the user should define
         if (!std::regex_match(pinName, std::regex("^A?\\d+$"))) {
             undefinedPins.push_back(pinName);
         }
@@ -102,6 +105,7 @@ void Writer::writeSpecificGrafcetCpp(const std::string &destination, const std::
 
     dst <<  "SpecificGrafcet::SpecificGrafcet() : Grafcet(" + std::to_string(steps.size()) + ") {\n";
 
+    //Add all steps to the grafcet
     for(size_t i = 0; i < steps.size(); i++)
     {
         const std::string iStr = std::to_string(i);
@@ -110,6 +114,7 @@ void Writer::writeSpecificGrafcetCpp(const std::string &destination, const std::
 
     dst << '\n';
 
+    //Activate all initial steps
     for(size_t i = 0; i < steps.size(); i++)
     {
         if(!steps[i].getIsInitial())
@@ -126,6 +131,7 @@ void Writer::writeStepsCpp(const std::string &destination, const std::vector<Cod
 
     dst << "#include \"steps.hpp\"\n\n";
 
+    //Write all the code created previously by the Coder
     for(size_t i = 0; i < steps.size(); i++)
     {
         dst << steps[i].getCode(i);
@@ -143,6 +149,7 @@ void Writer::writeStepsHpp(const std::string &destination, size_t stepCount)
     dst << "#include \"grafstep.hpp\"\n";
     dst << "#include \"globalvars.hpp\"\n\n";
 
+    //Write a class declaration for each step
     for(size_t i = 0; i < stepCount; i++)
     {
         const std::string iStr = std::to_string(i);
@@ -165,6 +172,7 @@ void Writer::writeConstantsHpp(const std::string &destination)
 {
     std::ofstream dst(destination);
 
+    //Write all the invalid pins as #define statements
     for(size_t p = 0; p < undefinedPins.size(); p++)
     {
         dst << "#define " << undefinedPins[p] << " [PUT THE PIN NUMBER HERE]\n";
