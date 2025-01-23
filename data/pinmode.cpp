@@ -7,7 +7,7 @@ PinMode::PinMode()
 
 PinMode::PinMode(const PinMode::Mode &value)
 {
-    setMode(value);
+    forceSetMode(value);
 }
 
 PinMode::Mode PinMode::getMode() const
