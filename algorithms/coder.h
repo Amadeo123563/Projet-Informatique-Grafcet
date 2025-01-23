@@ -16,6 +16,11 @@
 #define IS_NUMBER(c) (c >= '0' && c <= '9')
 #define WHITESPACE " \n\r\t\f\v"
 
+//A condition is a list of TransitionConditionPart:
+//Each TransitionConditionPart:
+//    can be inverted or not
+//    has a separator with the next part (AND or OR) or no separator if it's the last part
+//    has a string part that is a condition to translate to C++
 typedef struct transitionConditionPart  {
     enum ConditionSeparator {
         Null,

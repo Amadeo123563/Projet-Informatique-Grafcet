@@ -32,6 +32,18 @@ const std::vector<std::string>& Coder::getGlobalVariables() const
     return globalVariables;
 }
 
+//The constructors should be written in the following format:
+//StepX::StepX() : Grafstep(X) {
+//    int* steps = (int*)malloc(Y * sizeof(int));
+//    steps[0] = Z;
+//      ...
+//    setTransitions(Y, steps);
+//}
+//Where:
+//    X is the step number,
+//    Y is the number of transitions,
+//    and Z is the next step number
+//There should be as many next steps as there are transitions
 void Coder::writeConstructor(CodeStep &code, int stepIndex, const std::vector<Step> &steps, const std::vector<Transition> &transitions)
 {
     int stepCount = 0;
@@ -55,6 +67,9 @@ void Coder::writeConstructor(CodeStep &code, int stepIndex, const std::vector<St
     code.setConstructorCode(constructor);
 }
 
+//This function write the init(), loop() and end() functions
+//Theses functions include specific code depending on the associated actions
+//Currently, loop() and end() are always empty
 void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Action> &actions)
 {
     std::string initCode = "";
@@ -65,6 +80,7 @@ void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Ac
     {
         const std::string& action = actions[step.getAssociatedActions()[a]].getContent();
 
+        //Send 1 to a Pin
         if (action.find("SET") == 0) {
             const std::string actionSubStr = action.substr(4);
             initCode += "    digitalWrite(" + actionSubStr + ", HIGH);\n";
@@ -72,6 +88,7 @@ void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Ac
             continue;
         }
 
+        //Send 0 to a Pin
         if (action.find("RESET") == 0) {
             const std::string actionSubStr = action.substr(6);
             initCode += "    digitalWrite(" + actionSubStr + ", LOW);\n";
@@ -79,6 +96,7 @@ void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Ac
             continue;
         }
 
+        //Assign a value to a variable. The right side of the assignment can be a variable, a number or any valid C++ set of operations between variables and numbers
         const size_t equalPos = action.find(":=");
         if (equalPos != std::string::npos) {
             initCode += "    " + addGlobalVarPreffixes(action.substr(0, equalPos - 1)) + " = " + addGlobalVarPreffixes(action.substr(equalPos + 3)) + ";\n";
@@ -93,22 +111,38 @@ void Coder::writeMainCode(CodeStep &code, const Step &step, const std::vector<Ac
     code.setEndCode(endCode);
 }
 
+//The shouldTransitionTo function should be written in the following format:
+//bool StepX::shouldTransitionTo(int step, const std::vector<int>& activeSteps) const {
+//    switch(step) {
+//    case Y:
+//        return (S) && (C);
+//    }
+//    return true;
+//}
+//Where:
+//    X is the step number,
+//    Y is the next step number,
+//    S checks that all steps prior to the transition are active (S is not written if there is only one previous step),
+//    C is the specific condition for the transition
 void Coder::writeShouldTransition(CodeStep &code, int stepIndex, const std::vector<Step> &steps, const std::vector<Transition> &transitions)
 {
     std::string transitionCode = "    switch(step) {\n";
     for(size_t t = 0; t < steps[stepIndex].getNextTransitions().size(); t++)
     {
+        //One transition can lead to multiple steps, so we put one case for each steps
+        //Reminder that the shouldTransitionTo() function is called once for every possible next step even if a transition is taken at some point before the last one get checked
         for(size_t s = 0; s < transitions[steps[stepIndex].getNextTransitions()[t]].getNextSteps().size(); s++)
         {
             transitionCode += "    case " + std::to_string(transitions[steps[stepIndex].getNextTransitions()[t]].getNextSteps()[s]) + ":\n";
         }
         std::string condition = "(";
         std::vector<int> previousSteps = getPreviousSteps(steps[stepIndex].getNextTransitions()[t], steps);
+        //If there are more than one previous step, we need to check that all of them are active
         if(previousSteps.size() > 1)
         {
             for(size_t p = 0; p < previousSteps.size(); p++)
             {
-                if(previousSteps[p] != stepIndex)
+                if(previousSteps[p] != stepIndex) //Don't check the current step as it must be active
                     condition += "inVector(" + std::to_string(previousSteps[p]) + ", activeSteps) && ";
             }
             condition = condition.substr(0, condition.size() - 4) + ") && (";
@@ -120,16 +154,18 @@ void Coder::writeShouldTransition(CodeStep &code, int stepIndex, const std::vect
     code.setTransitionCode(transitionCode);
 }
 
+//This function adds the "globalVars->" preffix to all variables in the input string
+//It also adds the variable to the list of global variables if it is not already in it
 std::string Coder::addGlobalVarPreffixes(const std::string &input)
 {
     std::string output = "";
     std::string foundVariableBuffer;
-    bool mayAddPrefix = true;
+    bool mayAddPrefix = true; //true when the next character can be the start of a variable
     bool readingVariable = false;
     for(size_t c = 0; c < input.size(); c++)
     {
         if(mayAddPrefix) {
-            if(IS_LETTER(input[c]))
+            if(IS_LETTER(input[c])) //If the next character is a letter, it is the start of a variable
             {
                 output += "globalVars->";
                 mayAddPrefix = false;
@@ -141,7 +177,7 @@ std::string Coder::addGlobalVarPreffixes(const std::string &input)
                 mayAddPrefix = false;
             }
         } else {
-            if(!IS_LETTER(input[c]) && !IS_NUMBER(input[c]))
+            if(!IS_LETTER(input[c]) && !IS_NUMBER(input[c])) //We reached the end of a variable or a number
             {
                 mayAddPrefix = true;
                 addVariable(foundVariableBuffer);
@@ -161,7 +197,7 @@ void Coder::addVariable(const std::string &name)
 {
     if(name.size() < 1)
         return;
-    for(size_t v = 0; v < globalVariables.size(); v++)
+    for(size_t v = 0; v < globalVariables.size(); v++) //Check if the variable is already in the list
     {
         if(globalVariables[v] == name)
             return;
@@ -169,6 +205,7 @@ void Coder::addVariable(const std::string &name)
     globalVariables.push_back(name);
 }
 
+//This function returns the list of steps that are previous to a transition
 std::vector<int> Coder::getPreviousSteps(int transitionIndex, const std::vector<Step> &steps)
 {
     std::vector<int> previousSteps;
@@ -192,8 +229,10 @@ std::string Coder::generateSpecificTransitionCode(const std::string &code)
     std::vector<TransitionConditionPart> conditionList;
     conditionList.push_back({"", TransitionConditionPart::Null, false});
     size_t c = 0;
+    //Separate the string condition to a list of TransitionConditionPart
     while(c < code.size())
     {
+        //Start by checking if we have a AND separator, OR separator or NOT
         if(c+2 < code.size() && code[c] == 'A' && code[c+1] == 'N' && code[c+2] == 'D')
         {
             conditionList[conditionList.size() - 1].separator = TransitionConditionPart::And;
@@ -211,12 +250,13 @@ std::string Coder::generateSpecificTransitionCode(const std::string &code)
             conditionList[conditionList.size() - 1].inverted = !conditionList[conditionList.size() - 1].inverted;
             c += 3;
         }
-        else
+        else //Add the current character to the current part
         {
             conditionList[conditionList.size() - 1].part += code[c];
             c++;
         }
     }
+    //The condition can now be translated to C++
     std::string condition = "";
     for(size_t p = 0; p < conditionList.size(); p++)
     {
@@ -240,8 +280,10 @@ std::string Coder::generateSpecificTransitionCode(const std::string &code)
     return condition;
 }
 
+//This function translates a condition part to C++, the part does not contain any separator (AND, OR) or NOT
 std::string Coder::generateSpecificCondition(const std::string &part)
 {
+    //Check if we received 1 from a pin
     const size_t pressedPos = part.find("PRESSED?");
     if(pressedPos != std::string::npos)
     {
@@ -250,6 +292,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
         return "digitalRead(" + pin + ") == HIGH";
     }
 
+    //Check if we received 0 from a pin
     const size_t releasedPos = part.find("RELEASED?");
     if(releasedPos != std::string::npos)
     {
@@ -258,6 +301,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
         return "digitalRead(" + pin + ") == LOW";
     }
 
+    //Check if the state has been active for a certain amount of time
     const size_t waitPos = part.find("WAIT ");
     if(waitPos != std::string::npos)
     {
@@ -265,6 +309,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
         return "timeSinceActivation() >= " + strToDuration(time);
     }
 
+    //Check if a variable is superior, inferior, equal, not equal to a number
     const size_t inferiorEqPos = part.find("&lt;=");
     if (inferiorEqPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, inferiorEqPos - 1)) + " <= " + addGlobalVarPreffixes(part.substr(inferiorEqPos + 6));
@@ -304,6 +349,7 @@ std::string Coder::trimWhitespaces(const std::string &str)
     return (end == std::string::npos) ? "" : trimmed.substr(0, end + 1);
 }
 
+//The outputed string is in milliseconds but can include a multiplication sign, it should be directly sent in the Arduino C++ code output
 std::string Coder::strToDuration(const std::string &str)
 {
     if(str[str.size() - 2] == 'm' && str[str.size() - 1] == 's')
