@@ -314,7 +314,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     if (inferiorEqPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, inferiorEqPos - 1)) + " <= " + addGlobalVarPreffixes(part.substr(inferiorEqPos + 6));
     }
-    const size_t superiorEqPos = part.find("&gt;=");
+    const size_t superiorEqPos = part.find(">=");
     if (superiorEqPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, superiorEqPos - 1)) + " >= " + addGlobalVarPreffixes(part.substr(superiorEqPos + 6));
     }
@@ -330,7 +330,7 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     if (inferiorPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, inferiorPos - 1)) + " < " + addGlobalVarPreffixes(part.substr(inferiorPos + 5));
     }
-    const size_t superiorPos = part.find("&gt;");
+    const size_t superiorPos = part.find(">");
     if (superiorPos != std::string::npos) {
         return addGlobalVarPreffixes(part.substr(0, superiorPos - 1)) + " > " + addGlobalVarPreffixes(part.substr(superiorPos + 5));
     }
