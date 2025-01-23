@@ -5,7 +5,7 @@
 #include "algorithms/coder.h"
 #include "algorithms/writer.h"
 
-#define UNITTESTING true
+#define UNITTESTING false
 
 #if UNITTESTING
 #include "unittests.h"
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     UnitTests::testAssociator();
     UnitTests::testCoder();
     UnitTests::testWriter();
-    std::cout << "Unit tests complete." << std::endl;
+    std::cout << "Unit tests complete. " << UnitTests::success << '/' << (UnitTests::success + UnitTests::failures) << std::endl;
     #else
     if (argc <= 2) {
         std::cout << "Not enough arguments provided." << std::endl;
