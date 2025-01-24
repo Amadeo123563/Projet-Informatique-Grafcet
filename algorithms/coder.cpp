@@ -288,8 +288,8 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     if(pressedPos != std::string::npos)
     {
         const std::string pin = trimWhitespaces(part.substr(0, pressedPos));
-        pinmodes[pin].setMode(PinMode::Input_Pulldown);
-        return "digitalRead(" + pin + ") == HIGH";
+        pinmodes[pin].setMode(PinMode::Input_Pullup);
+        return "digitalRead(" + pin + ") == LOW";
     }
 
     //Check if we received 0 from a pin
@@ -297,8 +297,8 @@ std::string Coder::generateSpecificCondition(const std::string &part)
     if(releasedPos != std::string::npos)
     {
         const std::string pin = trimWhitespaces(part.substr(0, releasedPos));
-        pinmodes[pin].setMode(PinMode::Input_Pulldown);
-        return "digitalRead(" + pin + ") == LOW";
+        pinmodes[pin].setMode(PinMode::Input_Pullup);
+        return "digitalRead(" + pin + ") == HIGH";
     }
 
     //Check if the state has been active for a certain amount of time
