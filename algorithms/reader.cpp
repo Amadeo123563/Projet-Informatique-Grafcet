@@ -24,7 +24,7 @@ void Reader::parseFile(const std::string& filename) {
     bool readingEdge = false;
 
     while (std::getline(file, line)) {
-        // D�tection des sections
+        // Détection des sections
         if (line.find("<section name=\"node\">") != std::string::npos) {
             readingNode = true;
             readingEdge = false;
@@ -46,7 +46,7 @@ void Reader::parseFile(const std::string& filename) {
             }
         }
 
-        // Lecture des attributs pour les n�uds
+        // Lecture des attributs pour les noeuds
         if (readingNode && line.find("<attribute key=") != std::string::npos) {
             size_t keyStart = line.find("key=\"") + 5;
             size_t keyEnd = line.find("\"", keyStart);
